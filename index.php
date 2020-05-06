@@ -40,6 +40,28 @@ $posts =
         'avatarImg' => 'userpic.jpg',
     ],
 ];
+
+function cutDescription($str, $maxLength = 300)
+{
+    if (mb_strlen($str) > $maxLength) {
+        $delimiter  = ' ';
+        $ellipsis = '...';
+        $linkMore = '<a class="post-text__more-link" href="#">Читать далее</a>';
+        $arrayWords = explode($delimiter, $str);
+        $length = 0;
+        $resultArray = [];
+        foreach ($arrayWords as $words) {
+            $length += mb_strlen($words);
+            $resultArray[] = $words;
+            if ($length > $maxLength) {
+                break;
+            }
+        }
+        $resultStr = implode($delimiter, $resultArray) . $ellipsis . $linkMore;
+        return "<p>{$resultStr}</p>";
+    }
+    return "<p>{$str}</p>";
+}
 ?>
 <!DOCTYPE html>
 <html lang="ru">
@@ -273,7 +295,7 @@ $posts =
                         <img src="img/<?=$post['description'];?>" alt="Фото от пользователя" width="360" height="240">
                     </div>
                     <?php elseif ($post['type'] === 'post-text'):?>
-                    <p><?=$post['description'];?></p>
+                    <p><?=cutDescription($post['description']);?></p>
                     <?endif;?>
                 </div>
                 <footer class="post__footer">

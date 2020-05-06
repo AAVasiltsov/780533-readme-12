@@ -43,26 +43,25 @@ $posts =
 
 function cutDescription($str, $maxLength = 300)
 {
-    $delimiter  = ' ';
-    $ellipsis = '...';
-    $linkMore = '<a class="post-text__more-link" href="#">Читать далее</a>';
-    $arrayWords = explode($delimiter, $str);
-    $length = 0;
-    $result = [];
-    foreach ($arrayWords as $word) {
-        $length += strlen($word);
-        $result[] = $word;
-        if ($length > $maxLength) {
-           break;
+    if (mb_strlen($str) > $maxLength) {
+        $delimiter  = ' ';
+        $ellipsis = '...';
+        $linkMore = '<a class="post-text__more-link" href="#">Читать далее</a>';
+        $arrayWords = explode($delimiter, $str);
+        $length = 0;
+        $resultArray = [];
+        foreach ($arrayWords as $words) {
+            $length += mb_strlen($words);
+            $resultArray[] = $words;
+            if ($length > $maxLength) {
+                break;
+            }
         }
+        $resultStr = implode($delimiter, $resultArray) . $ellipsis . $linkMore;
+        return "<p>{$resultStr}</p>";
     }
-    $resultStr = implode($delimiter, $result) . $ellipsis;
-    if ($length > $maxLength) {
-        return "<p>{$resultStr}{$linkMore}</p>";
-    }
-    return $str;
+    return "<p>{$str}</p>";
 }
-//echo cutDescription($posts[0]['description'], 100);
 ?>
 <!DOCTYPE html>
 <html lang="ru">
